@@ -1,0 +1,48 @@
+@model RegisterViewModel
+@{
+    ViewData["Title"] = "Registrer deg";
+}
+
+<div class="auth-container">
+    <div class="auth-card">
+        <h1>Registrer deg</h1>
+        
+        <form asp-action="Register" method="post">
+            <div asp-validation-summary="All" class="validation-summary"></div>
+            
+            <div class="form-group">
+                <label asp-for="FullName">Fullt navn</label>
+                <input asp-for="FullName" class="form-control" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Email">E-post</label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Password">Passord</label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="ConfirmPassword">Bekreft passord</label>
+                <input asp-for="ConfirmPassword" type="password" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Registrer</button>
+        </form>
+        
+        <p class="auth-link">
+            Har du allerede en konto? <a asp-action="Login">Logg inn her</a>
+        </p>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

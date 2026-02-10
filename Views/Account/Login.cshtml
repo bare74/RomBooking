@@ -1,0 +1,43 @@
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Logg inn";
+}
+
+<div class="auth-container">
+    <div class="auth-card">
+        <h1>Logg inn</h1>
+        
+        <form asp-action="Login" method="post">
+            <div asp-validation-summary="All" class="validation-summary"></div>
+            
+            <div class="form-group">
+                <label asp-for="Email">E-post</label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Password">Passord</label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group checkbox">
+                <label>
+                    <input asp-for="RememberMe" type="checkbox" />
+                    @Html.DisplayNameFor(m => m.RememberMe)
+                </label>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Logg inn</button>
+        </form>
+        
+        <p class="auth-link">
+            Har du ikke en konto? <a asp-action="Register">Registrer deg her</a>
+        </p>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

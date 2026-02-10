@@ -1,0 +1,45 @@
+@model Room
+@{
+    ViewData["Title"] = "Rediger rom";
+}
+
+<div class="page-header">
+    <h1>Rediger rom</h1>
+    <a asp-action="Rooms" class="btn btn-secondary">Tilbake</a>
+</div>
+
+<div class="form-container">
+    <form asp-action="EditRoom" asp-route-id="@Model.Id" method="post">
+        <input type="hidden" asp-for="Id" />
+        
+        <div asp-validation-summary="All" class="validation-summary"></div>
+        
+        <div class="form-group">
+            <label asp-for="Name">Romnavn</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="Description">Beskrivelse (valgfritt)</label>
+            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group checkbox">
+            <label>
+                <input asp-for="IsActive" type="checkbox" />
+                Aktiv
+            </label>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Lagre endringer</button>
+            <a asp-action="Rooms" class="btn btn-secondary">Avbryt</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

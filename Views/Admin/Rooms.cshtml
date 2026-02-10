@@ -1,0 +1,59 @@
+@model List<Room>
+@{
+    ViewData["Title"] = "Administrer rom";
+}
+
+<div class="page-header">
+    <h1>Administrer rom</h1>
+    <a asp-action="CreateRoom" class="btn btn-primary">Opprett nytt rom</a>
+</div>
+
+@if (Model.Any())
+{
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Navn</th>
+                    <th>Beskrivelse</th>
+                    <th>Status</th>
+                    <th>Opprettet</th>
+                    <th>Handlinger</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var room in Model)
+                {
+                    <tr>
+                        <td>@room.Name</td>
+                        <td>@(room.Description ?? "-")</td>
+                        <td>
+                            @if (room.IsActive)
+                            {
+                                <span class="badge badge-success">Aktiv</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-secondary">Inaktiv</span>
+                            }
+                        </td>
+                        <td>@room.CreatedAt.ToString("dd.MM.yyyy")</td>
+                        <td>
+                            <a asp-action="EditRoom" asp-route-id="@room.Id" class="btn btn-sm">Rediger</a>
+                            <form asp-action="DeleteRoom" asp-route-id="@room.Id" method="post" style="display: inline;" onsubmit="return confirm('Er du sikker på at du vil slette dette rommet?');">
+                                <button type="submit" class="btn btn-sm btn-danger">Slett</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="empty-state">
+        <p>Ingen rom registrert ennå.</p>
+        <a asp-action="CreateRoom" class="btn btn-primary">Opprett første rom</a>
+    </div>
+}

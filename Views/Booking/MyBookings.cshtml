@@ -1,0 +1,73 @@
+@model MyBookingsViewModel
+@{
+    ViewData["Title"] = "Mine bookinger";
+}
+
+<div class="page-header">
+    <h1>Mine bookinger</h1>
+    <a asp-action="Index" class="btn btn-secondary">Tilbake til oversikt</a>
+</div>
+
+@if (Model.UpcomingBookings.Any())
+{
+    <div class="bookings-section">
+        <h2>Kommende bookinger</h2>
+        <div class="bookings-list">
+            @foreach (var booking in Model.UpcomingBookings)
+            {
+                <div class="booking-item">
+                    <div class="booking-info">
+                        <h3>@booking.Room.Name</h3>
+                        <p class="booking-time">
+                            @booking.StartTime.ToString("dddd, dd. MMMM yyyy")
+                            <br />
+                            @booking.StartTime.ToString("HH:mm") - @booking.EndTime.ToString("HH:mm")
+                        </p>
+                        @if (!string.IsNullOrEmpty(booking.Notes))
+                        {
+                            <p class="booking-notes">@booking.Notes</p>
+                        }
+                    </div>
+                    <div class="booking-actions">
+                        <form asp-action="Cancel" asp-route-id="@booking.Id" method="post" onsubmit="return confirm('Er du sikker på at du vil kansellere denne bookingen?');">
+                            <button type="submit" class="btn btn-danger">Kanseller</button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <div class="empty-state">
+        <p>Du har ingen kommende bookinger.</p>
+        <a asp-action="Index" class="btn btn-primary">Book et rom nå</a>
+    </div>
+}
+
+@if (Model.PastBookings.Any())
+{
+    <div class="bookings-section">
+        <h2>Tidligere bookinger</h2>
+        <div class="bookings-list">
+            @foreach (var booking in Model.PastBookings.Take(10))
+            {
+                <div class="booking-item past">
+                    <div class="booking-info">
+                        <h3>@booking.Room.Name</h3>
+                        <p class="booking-time">
+                            @booking.StartTime.ToString("dddd, dd. MMMM yyyy")
+                            <br />
+                            @booking.StartTime.ToString("HH:mm") - @booking.EndTime.ToString("HH:mm")
+                        </p>
+                        @if (!string.IsNullOrEmpty(booking.Notes))
+                        {
+                            <p class="booking-notes">@booking.Notes</p>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}

@@ -1,0 +1,14 @@
+@{
+    ViewData["Title"] = "Ingen tilgang";
+}
+
+<div class="auth-container">
+    <div class="auth-card">
+        <h1>Ingen tilgang</h1>
+        <p>Du har ikke tilgang til denne siden. Kun administratorer kan administrere rom.</p>
+        
+        <div style="margin-top: 1.5rem;">
+            <a asp-controller="Booking" asp-action="Index" class="btn btn-primary">Tilbake til bookinger</a>
+        </div>
+    </div>
+</div>
