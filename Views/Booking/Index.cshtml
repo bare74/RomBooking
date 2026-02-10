@@ -1,80 +1,91 @@
 @model BookingViewModel
 @{
     ViewData["Title"] = "Bookinger";
-    var firstRoomId = Model.Rooms?.FirstOrDefault()?.Id ?? 0;
 }
 
 <div class="booking-header">
-    <h1>Rombooking</h1>
+    <h1>🏢 Rombooking</h1>
 
     <div class="date-selector">
-        <a asp-action="Index" asp-route-date="@Model.SelectedDate.AddDays(-1).ToString("yyyy-MM-dd")" class="btn">‹ Forrige dag</a>
+        <a asp-action="Index"
+           asp-route-date="@Model.SelectedDate.AddDays(-1).ToString("yyyy-MM-dd")"
+           class="btn btn-secondary btn-sm">‹ Forrige</a>
 
         <span class="current-date">@Model.SelectedDate.ToString("dddd, dd. MMMM yyyy")</span>
 
-        <a asp-action="Index" asp-route-date="@Model.SelectedDate.AddDays(1).ToString("yyyy-MM-dd")" class="btn">Neste dag ›</a>
-        <form asp-action="Index" method="get" style="display:inline-flex; align-items:center; gap:8px; margin-left:8px;">
+        <a asp-action="Index"
+           asp-route-date="@Model.SelectedDate.AddDays(1).ToString("yyyy-MM-dd")"
+           class="btn btn-secondary btn-sm">Neste ›</a>
+
+        <form asp-action="Index" method="get" style="display:inline-flex; align-items:center; gap:8px;">
             <input type="date"
                    name="date"
                    value="@Model.SelectedDate.ToString("yyyy-MM-dd")"
                    class="form-control"
-                   style="width:auto; padding:0.35rem 0.5rem;"
+                   style="width:auto; padding:0.5rem;"
                    onchange="this.form.submit()" />
-            <noscript>
-                <button type="submit" class="btn btn-sm">Gå</button>
-            </noscript>
         </form>
     </div>
 
-    <a asp-action="Index" asp-route-date="@DateTime.Today.ToString("yyyy-MM-dd")" class="btn btn-secondary">I dag</a>
+    <a asp-action="Index"
+       asp-route-date="@DateTime.Today.ToString("yyyy-MM-dd")"
+       class="btn">I dag</a>
 </div>
 
-<div class="booking-calendar">
-    <div class="rooms-grid">
+@if (Model.Rooms.Any())
+{
+    <div class="booking-calendar">
         @{
             var openingTime = new TimeSpan(8, 0, 0);
             var closingTime = new TimeSpan(16, 0, 0);
             var timeSlots = new List<TimeSpan>();
+
             for (var t = openingTime; t < closingTime; t = t.Add(TimeSpan.FromMinutes(30)))
                 timeSlots.Add(t);
 
             var roomsToShow = Model.Rooms.ToList();
-
             var skipUntil = roomsToShow.ToDictionary(r => r.Id, r => DateTime.MinValue);
         }
 
-        <div style="display:grid; grid-template-columns: 90px repeat(@roomsToShow.Count, minmax(220px, 1fr)); gap:10px; align-items:end; margin-bottom:10px;">
-            <div></div>
+        <!-- Header -->
+        <div class="calendar-header"
+             style="display:grid; grid-template-columns: 90px repeat(@roomsToShow.Count, minmax(220px, 1fr)); gap:10px; align-items:end; margin-bottom:10px;">
+
+            <div class="time-col"></div>
+
             @foreach (var room in roomsToShow)
             {
-                <div class="room-card" data-room-id="@room.Id" style="padding:12px;">
-                    <div class="room-header">
-                        <h3 style="margin:0;">@room.Name</h3>
-                        @if (!string.IsNullOrEmpty(room.Description))
-                        {
-                            <p class="room-description" style="margin:4px 0 0 0;">@room.Description</p>
-                        }
-                    </div>
+                <div class="room-card" style="padding:12px;">
+                    <h3>@room.Name</h3>
+                    @if (!string.IsNullOrEmpty(room.Description))
+                    {
+                        <p class="room-description">@room.Description</p>
+                    }
                 </div>
             }
         </div>
-        <div style="display:grid; grid-template-columns: 90px repeat(@roomsToShow.Count, minmax(220px, 1fr)); gap:10px;">
-            @foreach (var slot in timeSlots)
-            {
-                var slotStart = Model.SelectedDate.Date.Add(slot);
 
-                <div style="font-weight:600; padding-top:6px;">
+        <!-- Calendar Grid -->
+        <div class="calendar-grid"
+             style="display:grid; grid-template-columns: 90px repeat(@roomsToShow.Count, minmax(220px, 1fr)); gap:10px;">
+
+            @for (int r = 0; r < timeSlots.Count; r++)
+            {
+                var slot = timeSlots[r];
+                var slotStart = Model.SelectedDate.Date.Add(slot);
+                var gridRow = r + 1;
+
+                <div class="time-col" style="grid-column:1; grid-row:@gridRow;">
                     @slot.ToString(@"hh\:mm")
                 </div>
 
                 @for (int i = 0; i < roomsToShow.Count; i++)
                 {
                     var room = roomsToShow[i];
+                    var gridCol = i + 2;
+
                     if (skipUntil[room.Id] > slotStart)
-                    {
-                        <div></div>
                         continue;
-                    }
 
                     var bookings = Model.RoomBookings.ContainsKey(room.Id)
                     ? Model.RoomBookings[room.Id]
@@ -85,12 +96,11 @@
                     if (booking != null && booking.StartTime == slotStart)
                     {
                         var durationMinutes = (booking.EndTime - booking.StartTime).TotalMinutes;
-                        var rowSpan = (int)(durationMinutes / 30);
-                        if (rowSpan < 1) rowSpan = 1;
-
+                        var rowSpan = Math.Max(1, (int)(durationMinutes / 30));
                         skipUntil[room.Id] = booking.EndTime;
 
-                        <div class="time-slot booked" style="grid-row: span @rowSpan; min-height:54px;">
+                        <div class="time-slot booked"
+                             style="grid-column:@gridCol; grid-row:@gridRow / span @rowSpan;">
                             <span class="time">@booking.StartTime.ToString("HH:mm") - @booking.EndTime.ToString("HH:mm")</span>
                             <span class="user">@booking.User.FullName</span>
                             @if (!string.IsNullOrEmpty(booking.Notes))
@@ -106,24 +116,19 @@
                            asp-route-date="@Model.SelectedDate.ToString("yyyy-MM-dd")"
                            asp-route-time="@slot.ToString(@"hh\:mm")"
                            class="time-slot available"
-                           style="min-height:54px; display:flex; flex-direction:column; justify-content:center;">
-                            <span class="status">Ledig</span>
+                           style="grid-column:@gridCol; grid-row:@gridRow;">
+                            <span class="status">✓ Ledig</span>
                         </a>
-                    }
-                    else
-                    {
-                        // booking finnes, men start ikke her (dvs slot inne i booking)
-                        <div></div>
                     }
                 }
             }
         </div>
     </div>
-</div>
-
-@if (!Model.Rooms.Any())
+}
+else
 {
     <div class="empty-state">
-        <p>Ingen rom tilgjengelig. Kontakt administrator.</p>
+        <p>📭 Ingen rom tilgjengelig. Kontakt administrator.</p>
+        <a asp-controller="Rooms" asp-action="Index" class="btn">Administrer rom</a>
     </div>
 }

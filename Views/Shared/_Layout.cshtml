@@ -12,28 +12,29 @@
             <div class="container">
                 <a class="navbar-brand" asp-controller="Home" asp-action="Index">
                     <img src="~/img/RG15-med-ramme-2-neg.png" alt="RG15 logo" />
+                    <p>Rådhusgata 15</p>
                 </a>
-                
+
                 @if (User.Identity?.IsAuthenticated == true)
                 {
                     <div class="navbar-menu">
                         <a asp-controller="Booking" asp-action="Index">Bookinger</a>
                         <a asp-controller="Booking" asp-action="MyBookings">Mine bookinger</a>
-                        
+
                         @if (User.IsInRole("Admin"))
                         {
                             <a asp-controller="Admin" asp-action="Rooms">Administrer rom</a>
                         }
-                        
+
                         <form asp-controller="Account" asp-action="Logout" method="post" class="logout-form">
-                            <button type="submit" class="btn-link">Logg ut</button>
+                            <button type="submit">Logg ut</button>
                         </form>
                     </div>
                 }
             </div>
         </nav>
     </header>
-    
+
     <main class="container">
         @if (TempData["Success"] != null)
         {
@@ -41,23 +42,23 @@
                 @TempData["Success"]
             </div>
         }
-        
+
         @if (TempData["Error"] != null)
         {
             <div class="alert alert-error">
                 @TempData["Error"]
             </div>
         }
-        
+
         @RenderBody()
     </main>
-    
+
     <footer>
         <div class="container">
-            <p>&copy; 2025 - RG15</p>
+            <p>&copy; 2025 - RG15 Rådhusgata 15</p>
         </div>
     </footer>
-    
+
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

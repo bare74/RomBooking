@@ -1,0 +1,17 @@
+{
+  "name": "rombooking",
+  "version": "1.0.0",
+  "description": "Et komplett rombooking-system bygget i ASP.NET Core MVC.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:css": "lessc wwwroot/css/site.less wwwroot/css/site.css",
+    "watch:css": "lessc wwwroot/css/site.less wwwroot/css/site.css --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "less": "^4.5.1"
+  }
+}
