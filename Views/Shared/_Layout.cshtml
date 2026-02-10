@@ -10,7 +10,9 @@
     <header>
         <nav class="navbar">
             <div class="container">
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">RG15 booking</a>
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                    <img src="~/img/RG15-med-ramme-2-neg.png" alt="RG15 logo" />
+                </a>
                 
                 @if (User.Identity?.IsAuthenticated == true)
                 {
@@ -52,7 +54,7 @@
     
     <footer>
         <div class="container">
-            <p>&copy; 2025 - RomBooking</p>
+            <p>&copy; 2025 - RG15</p>
         </div>
     </footer>
     

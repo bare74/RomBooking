@@ -9,8 +9,21 @@
 
     <div class="date-selector">
         <a asp-action="Index" asp-route-date="@Model.SelectedDate.AddDays(-1).ToString("yyyy-MM-dd")" class="btn">‹ Forrige dag</a>
+
         <span class="current-date">@Model.SelectedDate.ToString("dddd, dd. MMMM yyyy")</span>
+
         <a asp-action="Index" asp-route-date="@Model.SelectedDate.AddDays(1).ToString("yyyy-MM-dd")" class="btn">Neste dag ›</a>
+        <form asp-action="Index" method="get" style="display:inline-flex; align-items:center; gap:8px; margin-left:8px;">
+            <input type="date"
+                   name="date"
+                   value="@Model.SelectedDate.ToString("yyyy-MM-dd")"
+                   class="form-control"
+                   style="width:auto; padding:0.35rem 0.5rem;"
+                   onchange="this.form.submit()" />
+            <noscript>
+                <button type="submit" class="btn btn-sm">Gå</button>
+            </noscript>
+        </form>
     </div>
 
     <a asp-action="Index" asp-route-date="@DateTime.Today.ToString("yyyy-MM-dd")" class="btn btn-secondary">I dag</a>

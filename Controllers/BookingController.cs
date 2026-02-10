@@ -28,7 +28,7 @@ public class BookingController : Controller
     
     public async Task<IActionResult> Index(DateTime? date)
     {
-        var selectedDate = date ?? DateTime.Today;
+        var selectedDate = date?.Date ?? DateTime.Today;
         var rooms = await _context.Rooms
             .Where(r => r.IsActive)
             .OrderBy(r => r.Name)

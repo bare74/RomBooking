@@ -21,11 +21,12 @@ body {
 /* Header og navigasjon */
 header {
     background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    
 }
 
 .navbar {
     padding: 1rem 0;
+    background-color: #e0e0e0;
 }
 
     .navbar .container {
@@ -39,8 +40,14 @@ header {
     font-weight: bold;
     color: #007bff;
     text-decoration: none;
+   
 }
-
+    .navbar-brand img {
+        height: 28px;
+        width: auto;
+        display: block;
+        filter: invert(1);
+    }
 .navbar-menu {
     display: flex;
     gap: 1.5rem;
@@ -276,6 +283,7 @@ footer {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
+    margin-top: 2rem;
     flex-wrap: wrap;
     gap: 1rem;
 }
