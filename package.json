@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:css": "lessc wwwroot/css/site.less wwwroot/css/site.css",
-    "watch:css": "lessc wwwroot/css/site.less wwwroot/css/site.css --watch"
+    "build:css": "npx lessc wwwroot/css/site.less wwwroot/css/site.css",
+    "watch:css": "npx lessc wwwroot/css/site.less wwwroot/css/site.css --watch"
   },
   "keywords": [],
   "author": "",
